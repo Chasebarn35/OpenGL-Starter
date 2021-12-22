@@ -1,5 +1,5 @@
+#include <iostream>
 
-
-static void glfw_error_callback(){
-    throw ("glfw error");
+void error_callback(int error, const char* description){
+    std::cout << "Error " << error << " { " << description << " }" << std::endl;
 }
