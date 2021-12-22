@@ -1,5 +1,5 @@
 #include <iostream>
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <exception>
 
@@ -16,7 +16,7 @@ if(!glfwInit()){
 GLFWwindow* window = glfwCreateWindow(640,480,"Muh Screen", NULL,NULL);
 
 glfwMakeContextCurrent(window);
-
+gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 
 glfwTerminate();
