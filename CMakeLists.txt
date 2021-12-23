@@ -1,5 +1,16 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(OPMain)
+
+project(OPMain LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(GNUInstallDirs)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 add_subdirectory(libraries/glfw)
@@ -10,7 +21,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC libraries/glad/include
 )
 
-target_link_directories(${PROJECT_NAME} 
+target_link_directories(${PROJECT_NAME}
     PRIVATE libraries/glfw/src
     PRIVATE libraries/glad/src
     )

@@ -1,1 +1,1 @@
-cmake -DGLFW_BUILD_DOCS=OFF -S . -B build
+cmake -DCMAKE_TOOLCHAIN_FILE=../cross-compliation.cmake -static-libstdc++ -S . -B build

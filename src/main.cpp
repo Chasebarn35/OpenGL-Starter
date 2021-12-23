@@ -15,6 +15,8 @@ if(!glfwInit()){
     return -1;
 }
 
+std::cout << "helloworld" << std::endl;
+
 GLFWwindow* window = glfwCreateWindow(640,480,"Title", NULL,NULL);
 
 glfwMakeContextCurrent(window);
