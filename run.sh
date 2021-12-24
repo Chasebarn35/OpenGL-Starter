@@ -1,2 +1,1 @@
-
-cd build/bin ; ./OPMain.exe
+build/bin/OPMain.exe

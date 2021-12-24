@@ -14,6 +14,9 @@ std::cout << "helloworld" << std::endl;
 if(!glfwInit()){
     return -1;
 }
+glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);//lowest opengl version, not actually sure if this is right for what my GLAD is
+glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
+
 
 std::cout << "helloworld" << std::endl;
 
