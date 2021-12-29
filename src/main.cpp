@@ -1,12 +1,11 @@
 #include <iostream>
+#include <exception>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <exception>
+#include <ClownLib.h>
 using std::cout;
 using std::endl;
 
-
-void error_callback(int error, const char* description);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window, GLfloat& _X, GLfloat& _Y);
 void ShaderSuccess(GLuint type,std::string Name);
@@ -36,7 +35,7 @@ if(!glfwInit()){
     cout << "GLFW Failed to Initialize" << endl;
     return -1;
 }
-glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);//GLAD version I am using
+glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);//GLAD version, 4.0
 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -136,9 +135,6 @@ return 0;
 
 
 
-void error_callback(int error, const char* description){
-    cout << "Error " << error << " { " << description << " }" << endl;
-}
 
 void ShaderSuccess(GLuint type,std::string Name){
     int success;
