@@ -15,14 +15,15 @@ const char *vertexShaderSource = "#version 400 compatibility\n"
 
 const char *fragmentShaderSource = "#version 400 compatibility\n"
 "out vec4 FragColor;\n"
-"void main()\n"
+"void main()\n" 
 "{\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"FragColor = vec4(1.0f, 0.5f, 0.4f, 1.0f);\n"
 "}\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window, GLfloat& _X, GLfloat& _Y);
 void ShaderSuccess(GLuint type,std::string Name);
+void LinkSuccess(GLuint type, std::string Name);
 
 int main(int argc, char* argv[]){
 glfwSetErrorCallback(error_callback);
@@ -93,7 +94,7 @@ glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices, GL_STATIC_DRAW);
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
-
+    LinkSuccess(shaderProgram,"PROGRAM");
 //TODO CHECK
 glUseProgram(shaderProgram);//use shader program to render
 
@@ -135,13 +136,23 @@ return 0;
 
 
 
+void LinkSuccess(GLuint type, std::string Name){
+    int success;
+    char infoLog[512];
+    glGetProgramiv(type,GL_LINK_STATUS,&success);
+    if(!success){
+        glGetProgramInfoLog(type,512,NULL,infoLog);
+        cout << "ERROR::SHADER::" << Name << "::LINKING_FAILURE\n" << infoLog << endl;
+    }
+}
+
 void ShaderSuccess(GLuint type,std::string Name){
     int success;
     char infoLog[512];//arbitrary size based off of tutorial
     glGetShaderiv(type,GL_COMPILE_STATUS,&success);
     if(!success){
-    glGetShaderInfoLog(type,512,NULL,infoLog);
-    cout << "ERROR::SHADER::" << Name << "::FAILURE\n" << infoLog << endl;
+       glGetShaderInfoLog(type,512,NULL,infoLog);
+        cout << "ERROR::SHADER::" << Name << "::COMPILATION_FAILURE\n" << infoLog << endl;
     }
 }
 
