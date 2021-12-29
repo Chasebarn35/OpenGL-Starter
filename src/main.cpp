@@ -5,6 +5,7 @@
 using std::cout;
 using std::endl;
 
+<<<<<<< HEAD
 const char *vertexShaderSource = "#version 400 compatibility\n"
 "layout (location = 0) in vec3 aPos;\n"
 "void main()\n"
@@ -20,6 +21,8 @@ const char *fragmentShaderSource = "#version 400 compatibility\n"
 "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 "}\0";
 
+=======
+>>>>>>> 3d3bbf36c7b33fa79cc15906bc91540587b4bfcd
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window, GLfloat& _X, GLfloat& _Y);
 void ShaderSuccess(GLuint type,std::string Name);
