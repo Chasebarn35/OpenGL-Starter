@@ -1,15 +1,6 @@
-#include <ClownLib/ClownLib.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
+#include "UserInput.h"
 using std::cout;
 using std::endl;
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window, GLfloat& _X, GLfloat& _Y);
-void ShaderSuccess(GLuint type,std::string Name);
-void LinkSuccess(GLuint type, std::string Name);
 
 int main(int argc, char* argv[]){
 glfwSetErrorCallback(error_callback);
@@ -23,7 +14,7 @@ if(!glfwInit()){
 }
 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);//GLAD version, 4.0
 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
-glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 
 GLFWwindow* window = glfwCreateWindow(windowWidth,windowHeight,"Title", NULL,NULL);
@@ -43,26 +34,7 @@ if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
 
 glViewport(0,0,windowWidth,windowHeight);
 glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
-GLfloat _X = .3f;
-GLfloat _Y = .3f;
-
-float vertices[] = {
--0.5f, -0.5f, 0.0f,
-0.5f, -0.5f, 0.0f,
-0.0f, 0.5f, 0.0f
-};
-
-unsigned int VAO,VBO;
-glGenVertexArrays(1,&VAO);
-glGenBuffers(1,&VBO);
-
-glBindVertexArray(VAO);
-
-
-//copy verticies array in a buffer
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices, GL_STATIC_DRAW);
-
+//------------------------------------------------ SHADERS------------
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -81,85 +53,69 @@ glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices, GL_STATIC_DRAW);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
     LinkSuccess(shaderProgram,"PROGRAM");
-//TODO CHECK
+
 glUseProgram(shaderProgram);//use shader program to render
 
 glDeleteShader(vertexShader);
 glDeleteShader(fragmentShader);
+//---------------------------------------------------
+
+
+float vertices[] = {
+-0.5f, 0.5f, 0.0f, //top left
+-0.5f, -0.5f, 0.0f,//bottom left
+0.5f, -0.5f, 0.0f,//bottom right
+0.5f, 0.6f, 0.0f,//top right
+0.0f, 0.9f, 0.0f//top middle
+};
+unsigned int indices[]{
+    0,1,2,
+    0,2,3,
+    0,3,4
+
+};
+
+unsigned int VAO,VBO, EBO;
+glGenVertexArrays(1,&VAO);
+glGenBuffers(1,&VBO);
+glGenBuffers(1,&EBO);
+glBindVertexArray(VAO);
+//copy verticies array in a buffer
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices, GL_STATIC_DRAW);
+
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 //set verticies pointer
 glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
 glEnableVertexAttribArray(0);
 
+glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
+glBindVertexArray(0);//unbind so accidental calls dont happen
 
-
-
-
-
-
+StateMachine wire;
 while(!glfwWindowShouldClose(window)){
-processInput(window,_X,_Y);
+
+
+processInput(window,wire);
 
 
 
-glClearColor(0.2f, _Y, _X, 1.0f);
+glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
 glClear(GL_COLOR_BUFFER_BIT);
-
 glUseProgram(shaderProgram);//use shader program to render
 glBindVertexArray(VAO);
-glDrawArrays(GL_TRIANGLES,0,3);
 
+glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
+
+
+//-----------------------------------------------------------------
     glfwSwapBuffers(window);//renders whatever is put on the window
-    glfwPollEvents();//polls output
+    glfwPollEvents();//polls output?
 }
 
 glfwTerminate();
 return 0;
-}
-
-
-
-
-
-void LinkSuccess(GLuint type, std::string Name){
-    int success;
-    char infoLog[512];
-    glGetProgramiv(type,GL_LINK_STATUS,&success);
-    if(!success){
-        glGetProgramInfoLog(type,512,NULL,infoLog);
-        cout << "ERROR::SHADER::" << Name << "::LINKING_FAILURE\n" << infoLog << endl;
-    }
-}
-
-void ShaderSuccess(GLuint type,std::string Name){
-    int success;
-    char infoLog[512];//arbitrary size based off of tutorial
-    glGetShaderiv(type,GL_COMPILE_STATUS,&success);
-    if(!success){
-       glGetShaderInfoLog(type,512,NULL,infoLog);
-        cout << "ERROR::SHADER::" << Name << "::COMPILATION_FAILURE\n" << infoLog << endl;
-    }
-}
-
-void processInput(GLFWwindow* window, GLfloat& _X, GLfloat& _Y){
-    if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, true);
-    }
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
-        _X+=0.01f;
-    }
-    if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
-        _X-=0.01f;
-    }
-    if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){
-        _Y+=0.01f;
-    }
-    if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
-        _Y-=0.01f;
-    }
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height){
-glViewport(0,0,width,height);
 }
