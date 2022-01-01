@@ -41,11 +41,23 @@ glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
     glCompileShader(vertexShader);
     ShaderSuccess(vertexShader,"VERTEX");//vertex Shader Code
 
+    unsigned int vertexShader2;
+    vertexShader2 = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader2, 1, &vertexShader2Source, NULL);
+    glCompileShader(vertexShader2);
+    ShaderSuccess(vertexShader2,"VERTEX2");
+
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
     ShaderSuccess(fragmentShader,"FRAGMENT");
+
+    unsigned int fragmentShader2;
+    fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader2, 1, &fragmentShader2Source, NULL);
+    glCompileShader(fragmentShader2);
+    ShaderSuccess(fragmentShader2,"FRAGMENT2");
 
     unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
@@ -54,10 +66,18 @@ glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
     glLinkProgram(shaderProgram);
     LinkSuccess(shaderProgram,"PROGRAM");
 
+    unsigned int shaderProgram2;
+    shaderProgram2 = glCreateProgram();
+    glAttachShader(shaderProgram2, vertexShader2);
+    glAttachShader(shaderProgram2, fragmentShader2);
+    glLinkProgram(shaderProgram2);
+    LinkSuccess(shaderProgram2,"PROGRAM2");
+
 glUseProgram(shaderProgram);//use shader program to render
 
 glDeleteShader(vertexShader);
 glDeleteShader(fragmentShader);
+glDeleteShader(fragmentShader2);
 //---------------------------------------------------
 
 
@@ -105,9 +125,10 @@ processInput(window,wire);
 
 glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
 glClear(GL_COLOR_BUFFER_BIT);
-glUseProgram(shaderProgram);//use shader program to render
 glBindVertexArray(VAO);
-
+glUseProgram(shaderProgram);//use shader program to render
+glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
+glUseProgram(shaderProgram2);
 glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
 
 
