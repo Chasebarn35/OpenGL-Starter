@@ -35,49 +35,46 @@ if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
 glViewport(0,0,windowWidth,windowHeight);
 glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
 //------------------------------------------------ SHADERS------------
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    ShaderSuccess(vertexShader,"VERTEX");//vertex Shader Code
+    unsigned int vertexShader[2];
+    vertexShader[0] = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader[0], 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader[0]);
+    ShaderSuccess(vertexShader[0],"VERTEX");//vertex Shader Code
+    vertexShader[1] = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader[1], 1, &vertexShader2Source, NULL);
+    glCompileShader(vertexShader[1]);
+    ShaderSuccess(vertexShader[1],"VERTEX2");//slightly moved vertex shading?
 
-    unsigned int vertexShader2;
-    vertexShader2 = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader2, 1, &vertexShader2Source, NULL);
-    glCompileShader(vertexShader2);
-    ShaderSuccess(vertexShader2,"VERTEX2");
+    unsigned int fragmentShader[2];
+    fragmentShader[0] = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader[0], 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader[0]);
+    ShaderSuccess(fragmentShader[0],"FRAGMENT");
 
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    ShaderSuccess(fragmentShader,"FRAGMENT");
+    fragmentShader[1] = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader[1], 1, &fragmentShader2Source, NULL);
+    glCompileShader(fragmentShader[1]);
+    ShaderSuccess(fragmentShader[1],"FRAGMENT2");
 
-    unsigned int fragmentShader2;
-    fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader2, 1, &fragmentShader2Source, NULL);
-    glCompileShader(fragmentShader2);
-    ShaderSuccess(fragmentShader2,"FRAGMENT2");
+    unsigned int shaderProgram[2];
+    shaderProgram[0] = glCreateProgram();
+    glAttachShader(shaderProgram[0], vertexShader[0]);
+    glAttachShader(shaderProgram[0], fragmentShader[0]);
+    glLinkProgram(shaderProgram[0]);
+    LinkSuccess(shaderProgram[0],"PROGRAM");
 
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    LinkSuccess(shaderProgram,"PROGRAM");
+    shaderProgram[1] = glCreateProgram();
+    glAttachShader(shaderProgram[1], vertexShader[1]);
+    glAttachShader(shaderProgram[1], fragmentShader[1]);
+    glLinkProgram(shaderProgram[1]);
+    LinkSuccess(shaderProgram[1],"PROGRAM2");
 
-    unsigned int shaderProgram2;
-    shaderProgram2 = glCreateProgram();
-    glAttachShader(shaderProgram2, vertexShader2);
-    glAttachShader(shaderProgram2, fragmentShader2);
-    glLinkProgram(shaderProgram2);
-    LinkSuccess(shaderProgram2,"PROGRAM2");
+glUseProgram(shaderProgram[0]);//use shader program to render
 
-glUseProgram(shaderProgram);//use shader program to render
-
-glDeleteShader(vertexShader);
-glDeleteShader(fragmentShader);
-glDeleteShader(fragmentShader2);
+glDeleteShader(vertexShader[0]);
+glDeleteShader(vertexShader[1]);
+glDeleteShader(fragmentShader[0]);
+glDeleteShader(fragmentShader[1]);
 //---------------------------------------------------
 
 
@@ -126,9 +123,9 @@ processInput(window,wire);
 glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
 glClear(GL_COLOR_BUFFER_BIT);
 glBindVertexArray(VAO);
-glUseProgram(shaderProgram);//use shader program to render
-glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
-glUseProgram(shaderProgram2);
+glUseProgram(shaderProgram[0]);//use shader program to render
+glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+glUseProgram(shaderProgram[1]);
 glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
 
 

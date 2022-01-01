@@ -3,27 +3,7 @@ using std::cout;
 using std::endl;
 
 
-StateMachine::StateMachine():Wireframe(false),x(0.3f),y(0.3f) {}
-
-bool StateMachine::getState(){
-    return Wireframe;
-}
-void StateMachine::changeState(){
-    Wireframe=!Wireframe;
-}
-void StateMachine::addX(GLfloat a){
-    x+=a;
-}
-void StateMachine::addY(GLfloat a){
-    y+=a;
-}
-GLfloat StateMachine::getX(){
-    return x;
-}
-GLfloat StateMachine::getY(){
-    return y;
-}
-
+StateMachine::StateMachine():state{(false),(false),(false),(false)},x(0.3f),y(0.3f) {}
 
 
 void LinkSuccess(GLuint type, std::string Name){
@@ -63,16 +43,16 @@ void processInput(GLFWwindow* window,StateMachine& state){//very badly written o
     if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
         state.addY(-0.01f);
     }
-    if(state.getState()){
+    if(state.getState(0)){
         if(glfwGetKey(window,GLFW_KEY_J) == GLFW_PRESS){
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            state.changeState();
+            state.changeState(0);
         }
     }
     else{
         if(glfwGetKey(window,GLFW_KEY_J) == GLFW_RELEASE){
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            state.changeState();
+            state.changeState(0);
         }
     }
 
