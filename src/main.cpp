@@ -16,17 +16,18 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);//GLAD version, 4.0
 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
+cout << vertexShaderStr << endl;
 
-GLFWwindow* window = glfwCreateWindow(windowWidth,windowHeight,"Title", NULL,NULL);
+
+GLFWwindow* window = glfwCreateWindow(windowWidth,windowHeight,"Chase's Program", NULL,NULL);
 if(!window){
     cout << "GLFW Window Failed to Open" << endl;    
     glfwTerminate();
     return -1;
 }
 
-
 glfwMakeContextCurrent(window);
-
+//glfwSwapInterval(0);//the vsync option, turn on if you want to not have a reduced framerate
 if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
     cout << "GLAD Failed to Initialize" << endl;
     return -1;
@@ -37,6 +38,7 @@ glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
 //------------------------------------------------ SHADERS------------
     unsigned int vertexShader[2];
     vertexShader[0] = glCreateShader(GL_VERTEX_SHADER);
+    cout << vertexShaderSource << endl;
     glShaderSource(vertexShader[0], 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader[0]);
     ShaderSuccess(vertexShader[0],"VERTEX");//vertex Shader Code
@@ -113,11 +115,22 @@ glBindBuffer(GL_ARRAY_BUFFER, 0);
 glBindVertexArray(0);//unbind so accidental calls dont happen
 
 StateMachine wire;
+double currtime = glfwGetTime();
+double prevtime = currtime;
+double delta = 0;
+double fpsLimit = 1.0/60.0;
 while(!glfwWindowShouldClose(window)){
 
+currtime = findFPS(currtime);//couts fps
+delta += (currtime- prevtime) /fpsLimit;
+prevtime = currtime;
+while(delta >= 1.0){//update the states in here
+    processInput(window,wire);
 
-processInput(window,wire);
+    delta--;
 
+
+}
 
 
 glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
@@ -132,6 +145,7 @@ glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
 //-----------------------------------------------------------------
     glfwSwapBuffers(window);//renders whatever is put on the window
     glfwPollEvents();//polls output?
+
 }
 
 glfwTerminate();

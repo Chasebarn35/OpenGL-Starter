@@ -32,16 +32,16 @@ void processInput(GLFWwindow* window,StateMachine& state){//very badly written o
         glfwSetWindowShouldClose(window, true);
     }
     if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
-        state.addX(0.01f);
+        state.addX(0.05f);
     }
     if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
-        state.addX(-0.01f);
+        state.addX(-0.05f);
     }
     if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){
-        state.addY(0.01f);
+        state.addY(0.05f);
     }
     if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
-        state.addY(-0.01f);
+        state.addY(-0.05f);
     }
     if(state.getState(0)){
         if(glfwGetKey(window,GLFW_KEY_J) == GLFW_PRESS){
@@ -63,4 +63,10 @@ void processInput(GLFWwindow* window,StateMachine& state){//very badly written o
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 glViewport(0,0,width,height);
+}
+
+double findFPS(double prevtime){
+    double currtime = glfwGetTime();
+    cout << (int)(1/(currtime - prevtime)) << "\n";
+    return currtime;
 }

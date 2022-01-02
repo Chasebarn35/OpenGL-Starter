@@ -24,4 +24,5 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window, StateMachine& state);
 void ShaderSuccess(GLuint type,std::string Name);
 void LinkSuccess(GLuint type, std::string Name);
+double findFPS(double prevtime);
 
