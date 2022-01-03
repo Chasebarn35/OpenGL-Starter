@@ -5,16 +5,15 @@ using std::string;
 using std::ifstream;
 ifstream vertFile(vertexPath);
 
-if(!vertFile.good()){
-    std::cout <<"Vert file path fucked" << std::endl;
+if(!vertFile.good() || !vertFile.is_open()){
+    std::cout <<"VERTICAL SHADER file not at directory" << std::endl;
 }
 
 ifstream fragFile(fragmentPath);
 
-if(!fragFile.good()){
-    std::cout <<"Frag file path fucked" << std::endl;
+if(!fragFile.good() || !fragFile.is_open()){
+    std::cout <<"FRAGMENT SHADER file not at directory" << std::endl;
 }
-
 
 string vertString((std::istreambuf_iterator<char>(vertFile)),(std::istreambuf_iterator<char>()));
 string fragString((std::istreambuf_iterator<char>(fragFile)),(std::istreambuf_iterator<char>()));
