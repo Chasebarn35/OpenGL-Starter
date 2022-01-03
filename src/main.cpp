@@ -1,4 +1,4 @@
-#include "UserInput.h"
+#include "Shader.h"
 using std::cout;
 using std::endl;
 
@@ -16,9 +16,6 @@ glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);//GLAD version, 4.0
 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,0);
 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-cout << vertexShaderStr << endl;
-
-
 GLFWwindow* window = glfwCreateWindow(windowWidth,windowHeight,"Chase's Program", NULL,NULL);
 if(!window){
     cout << "GLFW Window Failed to Open" << endl;    
@@ -35,49 +32,20 @@ if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
 
 glViewport(0,0,windowWidth,windowHeight);
 glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
-//------------------------------------------------ SHADERS------------
-    unsigned int vertexShader[2];
-    vertexShader[0] = glCreateShader(GL_VERTEX_SHADER);
-    cout << vertexShaderSource << endl;
-    glShaderSource(vertexShader[0], 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader[0]);
-    ShaderSuccess(vertexShader[0],"VERTEX");//vertex Shader Code
-    vertexShader[1] = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader[1], 1, &vertexShader2Source, NULL);
-    glCompileShader(vertexShader[1]);
-    ShaderSuccess(vertexShader[1],"VERTEX2");//slightly moved vertex shading?
+//---------------------------SHADER INITIALIZATION-----------------------
 
-    unsigned int fragmentShader[2];
-    fragmentShader[0] = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader[0], 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader[0]);
-    ShaderSuccess(fragmentShader[0],"FRAGMENT");
+Shader Shade("resources/Shaders/vertexShader.glsl","resources/Shaders/FragmentShader.glsl");//probably the wrong directories lol
 
-    fragmentShader[1] = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader[1], 1, &fragmentShader2Source, NULL);
-    glCompileShader(fragmentShader[1]);
-    ShaderSuccess(fragmentShader[1],"FRAGMENT2");
 
-    unsigned int shaderProgram[2];
-    shaderProgram[0] = glCreateProgram();
-    glAttachShader(shaderProgram[0], vertexShader[0]);
-    glAttachShader(shaderProgram[0], fragmentShader[0]);
-    glLinkProgram(shaderProgram[0]);
-    LinkSuccess(shaderProgram[0],"PROGRAM");
 
-    shaderProgram[1] = glCreateProgram();
-    glAttachShader(shaderProgram[1], vertexShader[1]);
-    glAttachShader(shaderProgram[1], fragmentShader[1]);
-    glLinkProgram(shaderProgram[1]);
-    LinkSuccess(shaderProgram[1],"PROGRAM2");
 
-glUseProgram(shaderProgram[0]);//use shader program to render
 
-glDeleteShader(vertexShader[0]);
-glDeleteShader(vertexShader[1]);
-glDeleteShader(fragmentShader[0]);
-glDeleteShader(fragmentShader[1]);
-//---------------------------------------------------
+Shade.use();
+//    int vertexTriangleColor = glGetUniformLocation(shaderProgram[1], "ourColor");
+
+
+
+//-----------------------------------------------------------------------
 
 
 float vertices[] = {
@@ -136,10 +104,12 @@ while(delta >= 1.0){//update the states in here
 glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
 glClear(GL_COLOR_BUFFER_BIT);
 glBindVertexArray(VAO);
-glUseProgram(shaderProgram[0]);//use shader program to render
+Shade.use();//use shader program to render
 glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-glUseProgram(shaderProgram[1]);
-glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
+//glUseProgram(shaderProgram[1]);
+
+//glUniform4f(vertexTriangleColor, 0.0f, wire.getX(), 0.0f, 1.0f);
+//glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
 
 
 //-----------------------------------------------------------------
