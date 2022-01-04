@@ -35,13 +35,12 @@ glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
 //---------------------------SHADER INITIALIZATION-----------------------
 
 Shader Shade("resources/Shaders/vertexShader.glsl","resources/Shaders/FragmentShader.glsl");//probably the wrong directories lol
+Shader Shade2("resources/Shaders/vertexShader2.glsl","resources/Shaders/fragmentShader2.glsl");
 
-
-
-
+int vertexTriangleColor = glGetUniformLocation(Shade2.ID, "ourColor");
+int vertexTriangleRotation = glGetUniformLocation(Shade.ID, "rotation");
 
 Shade.use();
-//    int vertexTriangleColor = glGetUniformLocation(shaderProgram[1], "ourColor");
 
 
 
@@ -104,12 +103,14 @@ while(delta >= 1.0){//update the states in here
 glClearColor(0.2f, wire.getY(), wire.getX(), 1.0f);
 glClear(GL_COLOR_BUFFER_BIT);
 glBindVertexArray(VAO);
-Shade.use();//use shader program to render
-glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-//glUseProgram(shaderProgram[1]);
 
-//glUniform4f(vertexTriangleColor, 0.0f, wire.getX(), 0.0f, 1.0f);
-//glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
+Shade2.use();
+glUniform4f(vertexTriangleColor, 0.0f, wire.getX(), 0.0f, 1.0f);
+glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+
+Shade.use();//use shader program to render
+glUniform1f(vertexTriangleRotation,wire.getX());
+glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
 
 
 //-----------------------------------------------------------------

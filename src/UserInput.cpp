@@ -70,3 +70,7 @@ double findFPS(double prevtime){
     cout << (int)(1/(currtime - prevtime)) << "\n";
     return currtime;
 }
+
+void error_callback(int error, const char* description){
+    std::cout << "Error " << error << " { " << description << " }" << std::endl;
+}

@@ -1,4 +1,3 @@
-#include <ClownLib/ClownLib.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -21,6 +20,7 @@ class StateMachine {
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void error_callback(int error, const char* description);
 void processInput(GLFWwindow* window, StateMachine& state);
 void ShaderSuccess(GLuint type,std::string Name);
 void LinkSuccess(GLuint type, std::string Name);

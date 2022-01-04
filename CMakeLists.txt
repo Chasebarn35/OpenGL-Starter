@@ -15,24 +15,20 @@ add_executable(${PROJECT_NAME} src/main.cpp src/UserInput.cpp src/Shader.cpp)
 
 add_subdirectory(libraries/glfw)
 add_subdirectory(libraries/glad)
-add_subdirectory(libraries/ClownLib)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC libraries/glfw/include
     PUBLIC libraries/glad/include
-    PUBLIC libraries/ClownLib/include
 )
 
 target_link_directories(${PROJECT_NAME}
     PRIVATE libraries/glfw/src
     PRIVATE libraries/glad/src
-    PRIVATE libraries/ClownLib/src
     )
 
 target_link_libraries(${PROJECT_NAME}
     glfw
     glad
-    ClownLib
     -static-libgcc 
     -static-libstdc++
     )   

@@ -6,13 +6,13 @@ using std::ifstream;
 ifstream vertFile(vertexPath);
 
 if(!vertFile.good() || !vertFile.is_open()){
-    std::cout <<"VERTICAL SHADER file not at directory" << std::endl;
+    std::cout <<"VERTICAL SHADER at " << vertexPath << " not found" << std::endl;
 }
 
 ifstream fragFile(fragmentPath);
 
 if(!fragFile.good() || !fragFile.is_open()){
-    std::cout <<"FRAGMENT SHADER file not at directory" << std::endl;
+    std::cout <<"FRAGMENT SHADER at " << fragmentPath << " not found" << std::endl;
 }
 
 string vertString((std::istreambuf_iterator<char>(vertFile)),(std::istreambuf_iterator<char>()));
@@ -29,7 +29,7 @@ ShaderSuccess(vertShader,"VERTEX");
 GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 glShaderSource(fragShader, 1, &fragData,NULL);
 glCompileShader(fragShader);
-ShaderSuccess(fragShader,"FRAGMENT");
+ShaderSuccess(fragShader,"FRAGMENT"); 
 
 ID = glCreateProgram();
 glAttachShader(ID,vertShader);
