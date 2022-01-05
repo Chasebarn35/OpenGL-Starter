@@ -21,14 +21,18 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC libraries/glad/include
 )
 
+include_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
+
 target_link_directories(${PROJECT_NAME}
     PRIVATE libraries/glfw/src
     PRIVATE libraries/glad/src
     )
+
+link_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
 
 target_link_libraries(${PROJECT_NAME}
     glfw
     glad
     -static-libgcc 
     -static-libstdc++
-    )   
+    )

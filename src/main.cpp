@@ -49,7 +49,15 @@ Shade.use();
 
 //-----------------------------------------------------------------------
 
+//---------------------------TEXTURE INITIALIZATION----------------------
+int x, y, n;
+unsigned char *data = stbi_load("resources/Textures/furrytexture.png" , &x, &y, &n, 0);
 
+
+
+
+
+//-----------------------------------------------------------------------
 float vertices[] = {
 -0.5f, 0.5f, 0.0f, //top left
 -0.5f, -0.5f, 0.0f,//bottom left
