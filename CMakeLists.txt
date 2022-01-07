@@ -15,10 +15,12 @@ add_executable(${PROJECT_NAME} src/main.cpp src/UserInput.cpp src/Shader.cpp)
 
 add_subdirectory(libraries/glfw)
 add_subdirectory(libraries/glad)
+add_subdirectory(libraries/glm)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC libraries/glfw/include
     PUBLIC libraries/glad/include
+    PUBLIC libraries/glm/glm
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
