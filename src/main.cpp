@@ -42,7 +42,7 @@ glViewport(0,0,windowWidth,windowHeight);
 glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
 //---------------------------SHADER INITIALIZATION-----------------------
 
-Shader Shade("resources/Shaders/vertexShader.glsl","resources/Shaders/FragmentShader.glsl");//probably the wrong directories lol
+Shader Shade("resources/Shaders/vertexShader.glsl","resources/Shaders/visibilityFragShader.glsl");//probably the wrong directories lol
 Shader Shade2("resources/Shaders/vertexShader2.glsl","resources/Shaders/fragmentShader2.glsl");
 
 Shade.use();
@@ -51,18 +51,62 @@ Shade.use();
 
 //-----------------------------------------------------------------------
 
+
 float vertices[] = {
-        //positions           //colors            //textures
-         0.5f,  0.6f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 0.75f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, .75f, // top left 
-         0.0f,  1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   0.5f, 1.0f  //top middle
+0.24f, -0.5f, 0.0f, 0.84f, 0.39f, 0.78f, 0.26f, 1.0f, 
+-0.5f, -0.5f, 0.0f, 0.8f, 0.91f, 0.2f, 1.0f, 1.0f, 
+-0.5f, -0.23f, 0.0f, 0.34f, 0.77f, 0.28f, 1.0f, 0.73f, 
+0.18f, -0.32f, 0.0f, 0.55f, 0.48f, 0.63f, 0.32f, 0.82f, 
+0.11f, -0.32f, 0.0f, 0.36f, 0.51f, 0.95f, 0.39f, 0.82f, 
+0.22f, -0.26f, 0.0f, 0.92f, 0.64f, 0.72f, 0.28f, 0.76f, 
+0.12f, -0.26f, 0.0f, 0.14f, 0.61f, 0.016f, 0.38f, 0.76f, 
+-0.062f, -0.19f, 0.0f, 0.24f, 0.14f, 0.8f, 0.56f, 0.69f, 
+0.17f, -0.16f, 0.0f, 0.16f, 0.4f, 0.13f, 0.33f, 0.66f, 
+0.29f, -0.18f, 0.0f, 0.11f, 1.0f, 0.22f, 0.21f, 0.68f, 
+0.31f, -0.082f, 0.0f, 0.51f, 0.84f, 0.61f, 0.19f, 0.58f, 
+0.23f, -0.087f, 0.0f, 0.3f, 0.64f, 0.52f, 0.27f, 0.59f, 
+0.0013f, -0.029f, 0.0f, 0.49f, 0.97f, 0.29f, 0.5f, 0.53f, 
+0.3f, -0.0039f, 0.0f, 0.77f, 0.53f, 0.77f, 0.2f, 0.5f, 
+0.22f, -0.0039f, 0.0f, 0.4f, 0.89f, 0.28f, 0.28f, 0.5f, 
+-0.18f, 0.16f, 0.0f, 0.35f, 0.81f, 0.92f, 0.68f, 0.34f, 
+-0.043f, 0.28f, 0.0f, 0.07f, 0.95f, 0.53f, 0.54f, 0.22f, 
+0.092f, 0.3f, 0.0f, 0.086f, 0.19f, 0.66f, 0.41f, 0.2f, 
+0.23f, 0.29f, 0.0f, 0.89f, 0.35f, 0.064f, 0.27f, 0.21f, 
+0.16f, 0.46f, 0.0f, 0.02f, 0.46f, 0.063f, 0.34f, 0.042f, 
+-0.27f, 0.48f, 0.0f, 0.24f, 0.97f, 0.9f, 0.77f, 0.023f, 
+0.38f, 0.31f, 0.0f, 0.85f, 0.27f, 0.54f, 0.12f, 0.19f,
 };
+
 unsigned int indices[]{
-        0, 1, 3, // first triangle
-        1, 2, 3, // second triangle
-        0, 3, 4  // third triangle
+0,1,2,
+0,4,2,
+4,7,2,
+2,7,15,
+7,12,15,
+4,6,7,
+4,3,5,
+4,6,5,
+6,7,12,
+12,8,6,
+6,5,8,
+8,9,10,
+10,8,11,
+11,8,12,
+12,11,14,
+14,11,10,
+10,13,14,
+13,14,18,
+18,14,17,
+17,14,12,
+17,16,12,
+17,18,19,
+16,15,12,
+15,16,20,
+16,17,20,
+17,19,20,
+2,15,20,
+19,18,21,
+13,18,21
 };
 
 unsigned int VAO,VBO, EBO;
@@ -82,7 +126,7 @@ glVertexAttribPointer(0,3,GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)0);
 glEnableVertexAttribArray(0);
 //color attribute
 glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-glEnableVertexAttribArray(1);
+glEnableVertexAttribArray(1); 
 //texture attribute
 glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 glEnableVertexAttribArray(2);
@@ -102,7 +146,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 int x, y, n;
-stbi_set_flip_vertically_on_load(true);
+//stbi_set_flip_vertically_on_load(true);
 unsigned char *data = stbi_load("resources/Textures/furrytexture.png", &x, &y, &n, 0);
 if(data){
     glTexImage2D(GL_TEXTURE_2D,0, GL_RGBA, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE,data);
@@ -152,13 +196,13 @@ while(!glfwWindowShouldClose(window)){
 
 
     //bind texture
-    glBindTexture(GL_TEXTURE_2D, texture);
+//    glBindTexture(GL_TEXTURE_2D, texture);
     Shade.use();//use shader program to render
     glBindVertexArray(VAO);
 
 
     glUniform1f(vertexTriangleRotation,wire.getX());
-    glDrawElements(GL_TRIANGLES,9,GL_UNSIGNED_INT,0);
+    glDrawElements(GL_TRIANGLES,87,GL_UNSIGNED_INT,0);
 
 
     //-----------------------------------------------------------------
