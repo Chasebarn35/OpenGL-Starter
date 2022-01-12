@@ -3,7 +3,7 @@ using std::cout;
 using std::endl;
 
 
-StateMachine::StateMachine():state{(false),(false),(false),(false)},x(0.3f),y(0.3f) {}
+StateMachine::StateMachine():state{(false),(false),(false),(false)},x(0.0f),y(0.3f) {}
 
 
 void LinkSuccess(GLuint type, std::string Name){

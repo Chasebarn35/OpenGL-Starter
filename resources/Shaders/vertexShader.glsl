@@ -7,12 +7,15 @@ out vec3 vertexColor;
 out vec2 TexCoord;
 
 uniform float rotation;
+uniform mat4 transform;
+
 
 void main()
 {
 
-float h = sqrt( pow(aPos.x,2) + pow(aPos.y,2) );
-gl_Position = vec4(h * cos(acos(aPos.x / h) + rotation ), h * sin(asin(aPos.y / h) + rotation ), aPos.z, 1.0);
+//float h = sqrt( pow(aPos.x,2) + pow(aPos.y,2) );
+//gl_Position = vec4(h * cos(acos(aPos.x / h) + rotation ), h * sin(asin(aPos.y / h) + rotation ), aPos.z, 1.0);
+gl_Position = transform * vec4(aPos,1.0f);
 vertexColor = aColor;//doesnt actually do anything
 TexCoord = vec2(aTexCoord.x,aTexCoord.y);
 }

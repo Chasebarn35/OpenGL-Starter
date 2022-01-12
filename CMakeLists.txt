@@ -20,7 +20,7 @@ add_subdirectory(libraries/glm)
 target_include_directories(${PROJECT_NAME} 
     PUBLIC libraries/glfw/include
     PUBLIC libraries/glad/include
-    PUBLIC libraries/glm/glm
+    PUBLIC libraries/glm/glm   #Not sure this is right
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
@@ -35,6 +35,7 @@ link_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
 target_link_libraries(${PROJECT_NAME}
     glfw
     glad
+    glm
     -static-libgcc 
     -static-libstdc++
     )

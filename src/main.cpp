@@ -2,6 +2,11 @@
 #include "stb_image.h"
 
 #include "Shader.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 using std::cout;
 using std::endl;
 
@@ -161,6 +166,11 @@ stbi_image_free(data);//free the image memory
 
 
 //-----------------------------------------------------------------------
+StateMachine wire;
+double currtime = glfwGetTime();
+double prevtime = currtime;
+double delta = 0;
+double fpsLimit = 1.0/60.0;
 
 
 
@@ -168,14 +178,11 @@ stbi_image_free(data);//free the image memory
 int vertexTriangleColor = glGetUniformLocation(Shade2.ID, "ourColor");
 int vertexTriangleRotation = glGetUniformLocation(Shade.ID, "rotation");
 
+glm::mat4 trans = glm::mat4(1.0f);
 
+int transformLOC = glGetUniformLocation(Shade.ID,"transform");
 //---
 
-StateMachine wire;
-double currtime = glfwGetTime();
-double prevtime = currtime;
-double delta = 0;
-double fpsLimit = 1.0/60.0;
 while(!glfwWindowShouldClose(window)){
 
     currtime = findFPS(currtime);//couts fps
@@ -201,14 +208,16 @@ while(!glfwWindowShouldClose(window)){
     glBindVertexArray(VAO);
 
 
-    glUniform1f(vertexTriangleRotation,wire.getX());
+
+    trans = glm::rotate(trans, wire.getX(), glm::vec3(0.0, 0.0, 1.0));
+    glUniformMatrix4fv(transformLOC, 1, GL_FALSE, glm::value_ptr(trans));
+
     glDrawElements(GL_TRIANGLES,87,GL_UNSIGNED_INT,0);
 
 
     //-----------------------------------------------------------------
         glfwSwapBuffers(window);//renders whatever is put on the window
         glfwPollEvents();//polls output?
-
 }
 glDeleteVertexArrays(1, &VAO);
 glDeleteBuffers(1, &VBO);
