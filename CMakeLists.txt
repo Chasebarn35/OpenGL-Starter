@@ -15,27 +15,26 @@ add_executable(${PROJECT_NAME} src/main.cpp src/UserInput.cpp src/Shader.cpp)
 
 add_subdirectory(libraries/glfw)
 add_subdirectory(libraries/glad)
-add_subdirectory(libraries/glm)
+add_subdirectory(libraries/glm/glm)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC libraries/glfw/include
     PUBLIC libraries/glad/include
-    PUBLIC libraries/glm/glm   #Not sure this is right
+    PUBLIC libraries/glm/glm
 )
 
-include_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
+include_directories(${CMAKE_SOURCE_DIR}/libraries/stb)
 
 target_link_directories(${PROJECT_NAME}
     PRIVATE libraries/glfw/src
     PRIVATE libraries/glad/src
     )
 
-link_directories(${CMAKE_SOURCE_DIR}/libraries/stb_image)
+link_directories(${CMAKE_SOURCE_DIR}/libraries/stb)
 
 target_link_libraries(${PROJECT_NAME}
     glfw
     glad
-    glm
     -static-libgcc 
     -static-libstdc++
     )
