@@ -39,3 +39,5 @@ target_link_libraries(${PROJECT_NAME}
     -static-libgcc 
     -static-libstdc++
     )
+
+ 
